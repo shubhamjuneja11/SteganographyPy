@@ -19,8 +19,13 @@ def upload():
     im=flask.request.values.get('image')
     password=flask.request.values.get('password')
     type=flask.request.values.get('type')
+    if (type == 'jpeg'):
+        type = 'jpg'
     outputpath="/home/shubhamjuneja11/"+password+'.'+type
+    print(type)
+
     inputpath="/home/shubhamjuneja11/input"+'.'+type
+    print(outputpath)
     with open(inputpath, "wb") as fh:
         fh.write(base64.decodestring(im))
     name=flask.request.values.get('name')
@@ -31,7 +36,6 @@ def upload():
     with open(outputpath, "rb") as f:
         data = f.read()
     #print(decoded)
-    print(data.encode('base64')) 
     return data.encode('base64')
 
 @app.route('/decode',methods=["POST"])
@@ -40,6 +44,8 @@ def decodeimage():
     im = flask.request.values.get('image')
     password = flask.request.values.get('password')
     type = flask.request.values.get('type')
+    if(type=='jpeg'):
+        type='jpg'
     outputpath = "/home/shubhamjuneja11/" + password + '.' + type
     print(outputpath)
     if(os.path.exists(outputpath)):
@@ -49,7 +55,7 @@ def decodeimage():
             secret=Steganography.decode(outputpath)
             return secret
     else:
-            return "sorry"
+            return "Wrong Password"
 
 if __name__ == '__main__':
-    app.run(host='192.168.43.75',port='5000')
+    app.run(host='192.168.0.105',port='5000')
